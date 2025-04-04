@@ -13,4 +13,16 @@ router.post('/', async (req, res) => {
   res.json(leagues);
 });
 
+router.delete('/:id', async (req, res) => {
+  try {
+    const league = await League.findByIdAndDelete(req.params.id);
+    if (!league) {
+      return res.status(404).json({ message: 'Liga não encontrada' });
+    }
+    res.json({ message: 'Liga deletada com sucesso' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao deletar liga', error });
+  }
+});
+
 module.exports = router;
