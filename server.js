@@ -10,18 +10,20 @@ const newsRoutes = require('./routes/newsRoutes');
 
 connectDB();
 
-
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:5173',  // Permitir apenas o frontend local
+  origin: ['http://localhost:3000', 'http://localhost:5173'],  // Permitir apenas o frontend local
   methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Métodos permitidos
   allowedHeaders: ['Content-Type', 'Authorization']  // Cabeçalhos permitidos
 }));
+
 app.use(bodyParser.json());
-app.use('/api/players', (req, res, next) => playerRoutes(req, res, next));  // Passando explicitamente o middleware
-app.use('/api/leagues', (req, res, next) => leagueRoutes(req, res, next));
-app.use('/api/head-to-head', (req, res, next) => headToHeadRoutes(req, res, next));
-app.use('/api/news', (req, res, next) => newsRoutes(req, res, next));
+
+// Rotas de API
+app.use('/api/players', playerRoutes);  // Agora passando diretamente como middleware
+app.use('/api/leagues', leagueRoutes);
+app.use('/api/head-to-head', headToHeadRoutes);
+// app.use('/api/news', newsRoutes);
 
 app.listen(process.env.PORT || 5000, () => {
   console.log('Servidor rodando na porta 5000');
