@@ -7,6 +7,7 @@ const playerRoutes = require('./routes/playerRoutes');
 const leagueRoutes = require('./routes/leagueRoutes');
 const headToHeadRoutes = require('./routes/headToHeadRoutes');
 const newsRoutes = require('./routes/newsRoutes');
+const playerHistoryRoutes = require('./routes/playerHistoryRoutes');
 
 connectDB();
 
@@ -23,6 +24,7 @@ app.use(bodyParser.json());
 app.use('/api/players', playerRoutes);  // Agora passando diretamente como middleware
 app.use('/api/leagues', leagueRoutes);
 app.use('/api/head-to-head', headToHeadRoutes);
+app.use('/api/player-history', playerHistoryRoutes);
 // app.use('/api/news', newsRoutes);
 
 app.listen(process.env.PORT || 5000, () => {
