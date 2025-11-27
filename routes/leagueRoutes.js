@@ -3,7 +3,12 @@ const League = require('../models/League');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const leagues = await League.find();
+  const leagues = await League.find()
+    .populate('champion', 'name')
+    .populate('runnerUp', 'name')
+    .populate('thirdPlace', 'name')
+    .populate('players', 'name');
+
   res.json(leagues);
 });
 
