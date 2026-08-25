@@ -1,17 +1,76 @@
 const mongoose = require("mongoose");
 
 const PlayerHistorySchema = new mongoose.Schema({
-  league: { type: mongoose.Schema.Types.ObjectId, ref: "League", required: true },
-  player: { type: mongoose.Schema.Types.ObjectId, ref: "Player", required: true },
-  regularWins: { type: Number, default: 0 },  // Vitórias na fase regular
-  regularLosses: { type: Number, default: 0 },  // Derrotas na fase regular
-  playoffsWins: { type: Number, default: 0 },  // Vitórias nos playoffs
-  playoffsLosses: { type: Number, default: 0 },  // Derrotas nos playoffs
-  pointsScored: { type: Number, default: 0 },
-  pointsConceded: { type: Number, default: 0 },
-  pointDifference: { type: Number, default: 0 },  // saldo de pontos
-  finalPosition: { type: Number, required: true },  // posição final na liga
-  seasonYear: { type: Number, required: true },  // Ano da temporada
+  league: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "League",
+    required: true,
+  },
+
+  player: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Player",
+    required: true,
+  },
+
+  // Temporada regular
+  regularWins: {
+    type: Number,
+    default: 0,
+  },
+
+  regularLosses: {
+    type: Number,
+    default: 0,
+  },
+
+  regularTies: {
+    type: Number,
+    default: 0,
+  },
+
+  // Playoffs
+  madePlayoffs: {
+    type: Boolean,
+    default: false,
+  },
+
+  playoffsWins: {
+    type: Number,
+    default: 0,
+  },
+
+  playoffsLosses: {
+    type: Number,
+    default: 0,
+  },
+
+  // Pontuação
+  pointsScored: {
+    type: Number,
+    default: 0,
+  },
+
+  pointsConceded: {
+    type: Number,
+    default: 0,
+  },
+
+  pointDifference: {
+    type: Number,
+    default: 0,
+  },
+
+  // Resultado da temporada
+  finalPosition: {
+    type: Number,
+    required: true,
+  },
+
+  seasonYear: {
+    type: Number,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("PlayerHistory", PlayerHistorySchema);
