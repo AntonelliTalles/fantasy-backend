@@ -1,13 +1,17 @@
 require('dotenv').config();
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '1.1.1.1']);
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectDB = require('./config/db');
-const playerRoutes = require('./routes/playerRoutes'); 
+const playerRoutes = require('./routes/playerRoutes');
 const leagueRoutes = require('./routes/leagueRoutes');
 const headToHeadRoutes = require('./routes/headToHeadRoutes');
 const newsRoutes = require('./routes/newsRoutes');
 const playerHistoryRoutes = require('./routes/playerHistoryRoutes');
+const powerRankingRoutes = require('./routes/powerRankingRoutes');
 
 connectDB();
 
@@ -25,6 +29,7 @@ app.use('/api/players', playerRoutes);  // Agora passando diretamente como middl
 app.use('/api/leagues', leagueRoutes);
 app.use('/api/head-to-head', headToHeadRoutes);
 app.use('/api/player-history', playerHistoryRoutes);
+app.use('/api/power-ranking', powerRankingRoutes);
 // app.use('/api/news', newsRoutes);
 
 app.listen(process.env.PORT || 5000, () => {
