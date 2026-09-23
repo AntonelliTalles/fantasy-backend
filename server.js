@@ -12,6 +12,7 @@ const headToHeadRoutes = require('./routes/headToHeadRoutes');
 const newsRoutes = require('./routes/newsRoutes');
 const playerHistoryRoutes = require('./routes/playerHistoryRoutes');
 const powerRankingRoutes = require('./routes/powerRankingRoutes');
+const allTimeRoutes = require("./routes/allTime");
 
 connectDB();
 
@@ -30,6 +31,7 @@ app.use('/api/leagues', leagueRoutes);
 app.use('/api/head-to-head', headToHeadRoutes);
 app.use('/api/player-history', playerHistoryRoutes);
 app.use('/api/power-ranking', powerRankingRoutes);
+app.use("/api/all-time", allTimeRoutes);
 // app.use('/api/news', newsRoutes);
 
 app.listen(process.env.PORT || 5000, () => {
