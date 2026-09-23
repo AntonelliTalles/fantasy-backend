@@ -1,39 +1,69 @@
-require('dotenv').config();
-const dns = require('dns');
-dns.setServers(['8.8.8.8', '1.1.1.1']);
+require("dotenv").config();
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const connectDB = require('./config/db');
-const playerRoutes = require('./routes/playerRoutes');
-const leagueRoutes = require('./routes/leagueRoutes');
-const headToHeadRoutes = require('./routes/headToHeadRoutes');
-const newsRoutes = require('./routes/newsRoutes');
-const playerHistoryRoutes = require('./routes/playerHistoryRoutes');
-const powerRankingRoutes = require('./routes/powerRankingRoutes');
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
+const express = require("express");
+const cors = require("cors");
+
+const connectDB = require("./config/db");
+
+const playerRoutes = require("./routes/playerRoutes");
+const leagueRoutes = require("./routes/leagueRoutes");
+const headToHeadRoutes = require("./routes/headToHeadRoutes");
+const playerHistoryRoutes = require("./routes/playerHistoryRoutes");
+const powerRankingRoutes = require("./routes/powerRankingRoutes");
 const allTimeRoutes = require("./routes/allTime");
 
 connectDB();
 
 const app = express();
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173'],  // Permitir apenas o frontend local
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Métodos permitidos
-  allowedHeaders: ['Content-Type', 'Authorization']  // Cabeçalhos permitidos
-}));
 
-app.use(bodyParser.json());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:5173",
+  process.env.FRONTEND_URL,
+].filter(Boolean);
 
-// Rotas de API
-app.use('/api/players', playerRoutes);  // Agora passando diretamente como middleware
-app.use('/api/leagues', leagueRoutes);
-app.use('/api/head-to-head', headToHeadRoutes);
-app.use('/api/player-history', playerHistoryRoutes);
-app.use('/api/power-ranking', powerRankingRoutes);
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Permite requisições sem Origin, como Postman/health checks
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(
+        new Error("Origem não permitida pelo CORS")
+      );
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.use(express.json());
+
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "Fantasy Stats API is running",
+  });
+});
+
+app.use("/api/players", playerRoutes);
+app.use("/api/leagues", leagueRoutes);
+app.use("/api/head-to-head", headToHeadRoutes);
+app.use("/api/player-history", playerHistoryRoutes);
+app.use("/api/power-ranking", powerRankingRoutes);
 app.use("/api/all-time", allTimeRoutes);
-// app.use('/api/news', newsRoutes);
 
-app.listen(process.env.PORT || 5000, () => {
-  console.log('Servidor rodando na porta 5000');
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
