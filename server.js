@@ -7,7 +7,7 @@ const express = require("express");
 const cors = require("cors");
 
 const connectDB = require("./config/db");
-
+const authRoutes = require("./routes/authRoutes");
 const playerRoutes = require("./routes/playerRoutes");
 const leagueRoutes = require("./routes/leagueRoutes");
 const headToHeadRoutes = require("./routes/headToHeadRoutes");
@@ -55,6 +55,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/players", playerRoutes);
 app.use("/api/leagues", leagueRoutes);
 app.use("/api/head-to-head", headToHeadRoutes);
